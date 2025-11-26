@@ -1,0 +1,2 @@
+1. We used lucide-react to get icons
+2. and then used prebuiltui.com for prebuilt components
