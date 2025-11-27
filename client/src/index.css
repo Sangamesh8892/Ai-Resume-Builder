@@ -10,4 +10,8 @@
     button{
         @apply cursor-pointer;
     }
+
+    input:not([type="checkbox"]){
+        @apply outline-indigo-400 focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg;
+    }
 }
