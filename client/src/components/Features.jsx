@@ -1,5 +1,6 @@
 import React from "react";
 import {Zap} from "lucide-react"
+import Title from "./Title";
 
 
 const Features = () => {
@@ -11,6 +12,8 @@ const Features = () => {
              <Zap width={14} />
             <span>Simple Process</span>
         </div>
+
+          <Title title="Build tour resume" description="Our streamlined process helps you create a professional resume in minutes with intelligent AI-powred tools and features" />
 
 
             <div className="flex flex-col md:flex-row items-center justify-center">
