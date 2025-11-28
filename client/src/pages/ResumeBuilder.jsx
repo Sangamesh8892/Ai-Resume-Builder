@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import PersonalInfoForm from "../components/Forms/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
+import TemplateSelector from "../components/TemplateSelector";
+import ColorPicker from "../components/ColorPicker";
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
@@ -90,8 +92,14 @@ const ResumeBuilder = () => {
               />
 
               {/* Section Navigation */}
-              <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
-                <div className="flex items-center">
+              <div className="flex justify-between items-center mt-5 mb-6 border-b border-gray-300 py-1">
+                
+                <div className="flex justify-between items-center py-1 gap-2">
+                  
+                  <TemplateSelector selectedTemplate={resumeData.template} onChange={(template)=>setResumeData(prev=>({...prev,template}))} />
+                  <ColorPicker selectedColor={resumeData.accent_color} onChange={(color)=>setResumeData(prev=>({...prev,accent_color:color}))} /> 
+                </div>               
+                <div className={`flex items-center ml-25 ${activeSectionIndex ===0 && 'ml-45'} `}>
                   {activeSectionIndex !== 0 && (
                     <button
                       className="flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all"
@@ -146,7 +154,7 @@ const ResumeBuilder = () => {
                   {/* Fucntionality Buttons */}
                 </div>
                 {/* Resume Preview */}
-                <ResumePreview />
+                <ResumePreview data={resumeData} template={resumeData.template} accentColor={resumeData.accent_color} />
           </div>
         </div>
       </div>
