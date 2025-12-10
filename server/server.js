@@ -4,6 +4,7 @@ import "dotenv/config"
 import connectDb from "./configs/db.js"
 import userRouter from "./Routes/userRoutes.js";
 import resumeRouter from "./Routes/resumeRoutes.js";
+import aiRouter from "./Routes/aiRoutes.js";
 
 const app=express();
 const PORT = process.env.PORT || 3000;
@@ -13,10 +14,11 @@ app.use(cors())
 await connectDb()
 
 app.get('/',(req,res)=>{
-    res.send("Hello World")
+    res.send("Api is runnig.....")
 })
 app.use('/api/users',userRouter);
 app.use('/api/resumes',resumeRouter)
+app.use('/api/ai',aiRouter)
 
 
 

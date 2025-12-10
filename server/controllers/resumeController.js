@@ -127,8 +127,6 @@ export const updateResume= async(req,res)=>{
 
         resumeDataCopy.personal_info.image=response.url; 
 
-        
-
         const resume=await Resume.findOneAndUpdate({userId, _id:resumeId }, resumeDataCopy,{new:true});
 
         //return success message

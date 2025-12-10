@@ -18,7 +18,7 @@ const connectDb= async()=>{
             db_uri=db_uri.slice(0,-1);
         }
         
-        await mongoose.connect(db_uri,{dbName: "AI Resume Builder"})
+        await mongoose.connect(db_uri,{dbName: "AI-resume-builder"})
 
     }catch(e){
         console.log("Failed to connect to DB. Error :"+e.message)

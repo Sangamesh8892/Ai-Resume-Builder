@@ -29,7 +29,7 @@ const resumeSchema=new mongoose.Schema({
         type:String
     }],
     personal_info:{
-        iamge:{type:String,default:''},
+        image:{type:String,default:''},
         full_name:{type:String,default:''},
         profession:{type:String,default:''},
         email:{type:String,default:''},

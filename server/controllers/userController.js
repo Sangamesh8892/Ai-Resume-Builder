@@ -85,7 +85,7 @@ export const loginUser= async (req,res)=>{
 
         //return success message
         const token=generateToken(user._id)
-        newUser.password=undefined;
+        user.password=undefined;
 
         return res.status(200).json({
             message:"Login Successfull",
@@ -108,7 +108,7 @@ export const loginUser= async (req,res)=>{
 export const getuserById= async (req,res)=>{
 
     try{
-        const {userId}=req.userId;
+        const userId=req.userId;
 
         //check if user exist
         const user= await User.findById(userId)
