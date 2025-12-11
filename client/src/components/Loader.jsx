@@ -1,18 +1,21 @@
-import { FileText, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React from "react";
 
 const Loader = () => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-md">
+    // Changed: bg-white/60 -> bg-white/10 (More transparent)
+    // Changed: backdrop-blur-md -> backdrop-blur-lg (Stronger blur for better focus)
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-trasnparent backdrop-blur-lg">
       <div className="flex flex-col items-center gap-6">
         {/* Main loader icon */}
-        <div className="rounded-full border-2 border-purple-200 bg-white p-4 shadow-lg">
+        <div className="rounded-full">
           <Loader2 className="h-10 w-10 animate-spin text-purple-600" strokeWidth={2.5} />
         </div>
 
         {/* App name */}
         <div className="flex flex-col items-center gap-2">
-          <h2 className="text-xl font-semibold tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          {/* Added a text shadow/drop-shadow to ensure text is readable over any background */}
+          <h2 className="text-xl font-semibold tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
             Resume Builder
           </h2>
           <div className="flex items-center gap-2">
