@@ -30,6 +30,10 @@ export const enhanceProfessionalSummery=async (req,res)=>{
     return res.status(200).json({enhancedContent})
     
     }catch(e){
+                    if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
+            return res.status(429).json({message: 'AI rate limit exceeded. Please try again tommorrow.'})
+            }
+
         res.status(400).json({message: e.message})
     }
 }
@@ -61,6 +65,13 @@ export const enhanceJobDescription=async (req,res)=>{
     return res.status(200).json({enhancedContent})
     
     }catch(e){
+                
+
+            if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
+            return res.status(429).json({message: 'AI rate limit exceeded. Please try again tommorrow.'})
+            }
+
+
         res.status(400).json({message: e.message})
     }
 }
@@ -79,7 +90,7 @@ export const uploadResume=async (req,res)=>{
         
         const systemPrompt="You are an expert AI agent to extract data from resume";
         const userPrompt=`Extract data from this resume: ${resumeText}
-        Provide data in the following JSON format with no additional text before or after: 
+        Provide data in the following JSON format with no additional text before or after:
         professional_summary:{
             type:String,
             default:''
@@ -122,7 +133,10 @@ export const uploadResume=async (req,res)=>{
                 graduation_date:{type:String},
                 gpa:{type:String}
             }
-                
+        
+        Note: Even if there is no image in uploaded resume, you need to add personal_info:{
+            image:{type:String,default:''},
+            with empty string
             `
 
         const response=await ai.chat.completions.create({
@@ -146,6 +160,11 @@ export const uploadResume=async (req,res)=>{
     return res.json({resumeId: newResume._id})
     
     }catch(e){
+
+        if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
+            return res.status(429).json({message: 'AI rate limit exceeded. Please try again tommorrow.'})
+        }
+
         res.status(400).json({message: e.message})
     }
 }

@@ -65,17 +65,34 @@ const Dashboard = () => {
       setShowUploadResume(false)
       navigate(`/app/builder/${data.resumeId}`)
     }catch(err){
-      toast.error(err?.response?.data?.message || err.message)      
+
+      
+          toast.error(err?.response?.data?.message || err.message) 
+     
+           
     }
     setIsLoading(false);
   }
 
   const editTitle= async (e)=>{
-    e.preventDefault();
+    try{
+      e.preventDefault();
+      const {data}=await api.put(`/api/resumes/update`,{resumeId: editResumeId, resumeData:{title}},{headers: {
+          Authorization: token
+        }})
+      setALlResume(allResume.map(resume=>resume._id === editResumeId ? {...resume, title} : resume))
+      setTitle('')
+      setEditResumeId('')
+      toast.success(data.message)
+    }catch(err){
+      toast.error(err?.response?.data?.message || err.message) 
+
+    }
 
   }
 
   const deleteResume= async (resumeId)=>{
+    
 try{
       const confirm=window.confirm('Are you sure you want to delte this resume')
     if(confirm){
@@ -112,10 +129,10 @@ try{
           <p className='text-sm group-hover: text-indigo-600 transition-all
             duration-300'>Create Resume</p>
         </button>
-         <button onClick={()=>setShowUploadResume(true)} className='w-full bg-white sm:max-w-36 h-48 flex flex-col items-center
+         <button disabled={isLoading} onClick={()=>setShowUploadResume(true)} className='w-full bg-white sm:max-w-36 h-48 flex flex-col items-center
               justify-center rounded-lg gap-2 text-slate-600 border border-dashed
           border-slate-300 group hover:border-indigo-500 hover: shadow-lg transition-all
-              duration-300 cursor-pointer'>
+              duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'>
           <UploadCloudIcon className='size-11 transition-all duration-300 p-2.5 bg-gradient-to-br from-purple-300 to-rose-300 text-white rounded-full' />
           <p className='flex justify-center gap-2 items-center text-sm group-hover: text-indigo-600 transition-all
             duration-300'>
@@ -197,8 +214,8 @@ try{
                       <input type='file' id="resume-input" accept='.pdf' hidden onChange={(e)=>setResume(e.target.files[0])}/>
                       </label>
                   </div>
-                  <button className='flex justify-center items-center w-full py-2 bg-gradient-to-l from-[#ffb3c6] to-[#0077b6] text-white rounded 
-                    hover:opacity-70 transition-all'>
+                  <button disabled={isLoading} className='flex justify-center items-center w-full py-2 bg-gradient-to-l from-[#ffb3c6] to-[#0077b6] text-white rounded 
+                    hover:opacity-70 transition-all disabled:opacity-50 disabled:cursor-not-allowed'>
                                     {isLoading ? (<>
                 <LoaderCircleIcon className='animate-spin size-5 text-white'/>
               </>): "Upload Resume"}

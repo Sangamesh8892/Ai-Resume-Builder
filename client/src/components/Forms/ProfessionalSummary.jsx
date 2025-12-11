@@ -1,7 +1,28 @@
 import React from 'react'
-import {Sparkles} from "lucide-react"
+import {Loader2, Sparkles} from "lucide-react"
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
+import api from '../../configs/api'
+import toast from 'react-hot-toast'
 
 const ProfessionalSummary = ({data,onChange}) => {
+
+    const {token}=useSelector(state=>state.auth)
+    const [isGenerating,setIsGenerating]=useState(false)
+    const generateSummary= async()=>{
+        try {
+            setIsGenerating(true)
+            const prompt=`Enhance my professional summery: ${data}`
+            const res=await api.post('/api/ai/enhance-pro-sum',{userContent: prompt}, {headers:{Authorization:token}})
+            setResumeData(prev=>({...prev, professional_summary:res.data.enhancedContent}))
+        } catch (err) {
+            toast.error(err?.response?.data?.message || err.message)
+        }
+        finally{
+            setIsGenerating(false)
+        }
+    }
+
     return (
         <div className='space-y-5'>
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -11,10 +32,21 @@ const ProfessionalSummary = ({data,onChange}) => {
                         </div>
                         <button
                             type='button'
-                            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition hover:brightness-110"
-                        >
-                                <Sparkles className="size-4"/>
-                                Ai Enhance
+                            className="
+                                        inline-flex items-center gap-2 rounded-2xl
+                                        bg-gradient-to-r from-indigo-600 to-fuchsia-500
+                                        px-4 py-2 text-sm font-semibold text-white
+                                        shadow-md shadow-indigo-200 transition
+                                        hover:brightness-130
+                                        disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:brightness-100
+                                        "
+
+                            disabled={isGenerating}
+                            onClick={generateSummary}
+                        >       
+                                {isGenerating ? (<Loader2 className='size-4 animate-spin'/>):(<Sparkles className="size-4"/>)}
+                                {isGenerating ? "Enhancing..":"Ai Enhance"}
+                                
                         </button>
                 </div>
 

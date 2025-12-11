@@ -26,9 +26,13 @@ import ExperienceForm from "../components/Forms/ExperienceForm";
 import EducationForm from "../components/Forms/EducationForm";
 import ProjectsForm from "../components/Forms/ProjectsForm";
 import SkillsForm from "../components/Forms/SkillsForm";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
+  const {token}=useSelector(state=>state.auth)
 
   const [resumeData, setResumeData] = useState({
     _id: "",
@@ -37,7 +41,7 @@ const ResumeBuilder = () => {
     professional_summary: "",
     experience: [],
     education: [],
-    project: [],
+    projects: [],
     skills: [],
     template: "classic",
     accent_color: "#3B82F6",
@@ -45,11 +49,19 @@ const ResumeBuilder = () => {
   });
 
   const loadExistingResume = async () => {
-    const resume = dummyResumeData.find((resume) => resume._id == resumeId);
-    if (resume) {
-      setResumeData(resume);
-      document.title = resume.title;
+    try{
+      const {data}=await api.get('/api/resumes/get/'+ resumeId,{headers:{
+        Authorization: token
+      }})
+
+      if(data){
+        setResumeData(data.resume)
+        document.title=data.resume.title;
+      }
+    }catch(err){
+      toast.error(err?.response?.data?.message || err.message)  
     }
+
   };
 
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
@@ -71,7 +83,19 @@ const ResumeBuilder = () => {
   }, []);
 
   const changeResumeVisbility= async ()=>{
-    await setResumeData({...resumeData,public:!resumeData.public})
+    try{
+      const formData=new FormData();
+      formData.append("resumeId",resumeId)
+      formData.append("resumeData",JSON.stringify({public: !resumeData.public}))
+
+      const {data}=await api.put('/api/resumes/update',formData,{headers:{Authorization: token}})
+
+      setResumeData({...resumeData, public: !resumeData.public})
+      toast.success(data.message)
+
+    }catch(err){
+      toast.error(err?.response?.data?.message || err.message) 
+    }
   }
 
   const handleShare=()=>{
@@ -82,6 +106,30 @@ const ResumeBuilder = () => {
       navigator.share({url:resumeUrl,text:"My Resume"})
     }else{
       alert("Share Not supported on this browser")
+    }
+  }
+
+  const saveResume= async ()=>{
+    try {
+      let updatedResumeData= structuredClone(resumeData);
+
+      //remove image from updatedResumeData
+      if(typeof resumeData.personal_info.image==='object'){
+        delete updatedResumeData.personal_info.image
+      }
+
+      const formData=new FormData()
+      formData.append("resumeId", resumeId)
+      formData.append("resumeData", JSON.stringify(updatedResumeData))
+      removeBackground && formData.append("removeBackground", "yes");
+      typeof resumeData.personal_info.image==='object' && formData.append("image",resumeData.personal_info.image);
+
+      const {data}=await api.put('/api/resumes/update', formData , {headers:{Authorization:token}})
+      setResumeData(data.resume);
+      setRemoveBackground(false);
+      toast.success(data.message)
+    } catch (err) {
+      toast.error(err?.response?.data?.message || err.message)
     }
   }
 
@@ -212,8 +260,8 @@ const ResumeBuilder = () => {
                 )}
                 
                 {activeSection.id == "projects" && 
-                <ProjectsForm data={resumeData.project}
-                onChange={(data)=>setResumeData(prev=>({...prev,project:data}))}
+                <ProjectsForm data={resumeData.projects}
+                onChange={(data)=>setResumeData(prev=>({...prev,projects:data}))}
                 />
                 }
 
@@ -225,6 +273,7 @@ const ResumeBuilder = () => {
                   }
 
                   <button
+                    onClick={()=>{toast.promise(saveResume,{loading: 'Saving...'})}}
                     className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     Save Changes
