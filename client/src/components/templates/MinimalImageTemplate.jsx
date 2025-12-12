@@ -161,7 +161,7 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
                                 PROJECTS
                             </h2>
                             <div className="space-y-4">
-                                {data.project.map((project, index) => (
+                                {data.projects.map((project, index) => (
                                     <div key={index}>
                                         <h3 className="text-md font-medium text-zinc-800 mt-3">{project.name}</h3>
                                         <p className="text-sm mb-1" style={{ color: accentColor }} >
