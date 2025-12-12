@@ -9,6 +9,7 @@ const ProfessionalSummary = ({data,onChange}) => {
 
     const {token}=useSelector(state=>state.auth)
     const [isGenerating,setIsGenerating]=useState(false)
+    const [resumeData,setResumeData]=useState(null)
     const generateSummary= async()=>{
         try {
             setIsGenerating(true)
