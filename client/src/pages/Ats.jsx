@@ -73,7 +73,7 @@ const Ats = () => {
 			} else {
 				const resumeText= await pdfToText(resume);
 
-				const { data } = await api.post('/api/ai/analyze-resume-uploaded', {resumeText}, {
+				const { data } = await api.post('/api/ai/analyze-resume', {resumeText, jobDescription}, {
 					headers: {
 						Authorization: token,
 					}

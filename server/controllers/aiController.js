@@ -51,7 +51,30 @@ export const enhanceJobDescription=async (req,res)=>{
         const Response=await ai.chat.completions.create({
         model: process.env.MODEL,
         messages: [
-        { role: "system", content: "You are an expert in crafting concise, high-impact job descriptions. Transform the user’s content into a polished, professional description using strong action verbs and quantifiable results wherever possible. Improve clarity, structure, and impact while preserving the original meaning. Remove filler and redundancy, keep it brief, optimize for ATS, and do not add new responsibilities or exaggerate beyond the provided content.Return only text no options or anything else" },
+        { role: "system",  content: `
+            You are an expert in crafting concise, high-impact job descriptions.
+
+            TASK:
+            Rewrite the user's content into a polished, professional job description.
+
+            STRICT RULES (MANDATORY):
+            - Output must be plain text ONLY
+            - Do NOT use bullet points, stars (*), dashes, or symbols
+            - Do NOT use markdown or formatting
+            - Use short, clear sentences separated by new lines
+            - Preserve original meaning exactly
+            - Do NOT add new responsibilities
+            - Do NOT exaggerate or invent experience
+            - Optimize wording for ATS readability
+            - Keep it concise and professional
+
+            NOTE: 
+            - Combine related sentences into a single cohesive paragraph
+            - Avoid repetitive sentence starters
+
+            
+            Return ONLY the rewritten text.
+            `},
         {
             role: "user",
             content: userContent,

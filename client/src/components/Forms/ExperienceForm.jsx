@@ -39,7 +39,8 @@ const ExperienceForm = ({data,onChange}) => {
             at ${experience.company}`
         try {
             const res=await api.post('/api/ai/enhance-job-desc',{userContent: prompt}, {headers:{Authorization:token}})
-            updateExperience(index,"description",data.enhancedContent)
+            updateExperience(index,"description",res.data.enhancedContent)
+            toast.success("Enhanced Successfully")
         } catch (err) {
             toast.error(err?.response?.data?.message || err.message)
         }
