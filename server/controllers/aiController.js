@@ -23,14 +23,13 @@ export const enhanceProfessionalSummery=async (req,res)=>{
             content: userContent,
         },
     ],
-        })
-
-    const enhancedContent=response.choices[0].message;
-
+        })  
+    const enhancedContent=response.choices[0].message.content;
     return res.status(200).json({enhancedContent})
     
+    
     }catch(e){
-                    if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
+            if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
             return res.status(429).json({message: 'AI rate limit exceeded. Please try again tommorrow.'})
             }
 
@@ -60,7 +59,7 @@ export const enhanceJobDescription=async (req,res)=>{
     ],
         })
 
-    const enhancedContent=Response.choices[0].message;
+    const enhancedContent=Response.choices[0].message.content;
 
     return res.status(200).json({enhancedContent})
     

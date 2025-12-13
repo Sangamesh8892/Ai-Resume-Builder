@@ -5,17 +5,17 @@ import { useState } from 'react'
 import api from '../../configs/api'
 import toast from 'react-hot-toast'
 
-const ProfessionalSummary = ({data,onChange}) => {
+const ProfessionalSummary = ({data,onChange,setResumeData}) => {
 
     const {token}=useSelector(state=>state.auth)
     const [isGenerating,setIsGenerating]=useState(false)
-    const [resumeData,setResumeData]=useState(null)
     const generateSummary= async()=>{
         try {
             setIsGenerating(true)
             const prompt=`Enhance my professional summery: ${data}`
             const res=await api.post('/api/ai/enhance-pro-sum',{userContent: prompt}, {headers:{Authorization:token}})
             setResumeData(prev=>({...prev, professional_summary:res.data.enhancedContent}))
+            toast.success("Successfully Enhanced")
         } catch (err) {
             toast.error(err?.response?.data?.message || err.message)
         }
