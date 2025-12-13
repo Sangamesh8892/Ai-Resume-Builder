@@ -168,3 +168,6 @@ export const uploadResume=async (req,res)=>{
         res.status(400).json({message: e.message})
     }
 }
+
+//Controller for analyzing user saved resume 
+//POST: /api/ai/analyze-resume

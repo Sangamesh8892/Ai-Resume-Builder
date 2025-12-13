@@ -45,7 +45,6 @@ const Dashboard = () => {
         setTitle('')
         setShowCreateResume(false)
         navigate(`/app/builder/${data.resume._id}`)
-        toast.success("Resume Uploaded Successfully")
       }catch(err){
           toast.error(err?.response?.data?.message || err.message)      
       }
@@ -64,6 +63,7 @@ const Dashboard = () => {
       setResume(null)
       setShowUploadResume(false)
       navigate(`/app/builder/${data.resumeId}`)
+      toast.success("Resume Uploaded Successfully")
     }catch(err){
 
       
@@ -117,6 +117,7 @@ try{
 
   return (
     <div>
+ 
       <div className='max-w-7xl mx-auto px-4 py-8'>
       <p className='text-2xl font-medium mb-6 bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent sm:hidden'>Welcome, Dummy Name</p>
 

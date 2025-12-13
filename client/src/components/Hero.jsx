@@ -26,6 +26,9 @@ const Hero = () => {
             <a href="#features" className="hover:text-indigo-600 transition">
               Features
             </a>
+            <a href="/app/ats" className="hover:text-indigo-600 transition">
+              ATS Check
+            </a>
           </div>
 
           <div className="flex gap-2">

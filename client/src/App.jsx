@@ -10,6 +10,7 @@ import api from "./configs/api.js";
 import { login, setLoading } from "./app/features/authSlice.js";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import Ats from "./pages/Ats.jsx";
 
 export default function App(){
 
@@ -51,6 +52,7 @@ export default function App(){
         <Route path="/" element={<Home />}/>
         <Route path="app" element={<Layout/>}>
           <Route index element={<Dashboard />} />
+          <Route path="ats" element={<Ats/>} />
           <Route path="builder/:resumeId" element={<ResumeBuilder />} />
         </Route>
         <Route path="view/:resumeId" element={<Preview/>} />
