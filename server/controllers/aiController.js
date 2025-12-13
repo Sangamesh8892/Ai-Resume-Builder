@@ -171,3 +171,81 @@ export const uploadResume=async (req,res)=>{
 
 //Controller for analyzing user saved resume 
 //POST: /api/ai/analyze-resume
+
+export const analyzeResumeSaved=async (req,res)=>{
+    try{
+        const {resumeText, jobDescription}=req.body
+        const userId=req.userId;
+        
+        if(!resumeText){
+            return res.status(400).json({message:'Missing required fields'})
+        }
+        
+        const systemPrompt = `
+            You are an ATS (Applicant Tracking System) simulation engine.
+            You must behave like a strict resume parser and keyword matcher.
+            Return ONLY valid JSON. Do not add explanations.
+            `;
+
+        const userPrompt = `
+            RESUME TEXT:
+            ${resumeText}
+
+            JOB DESCRIPTION:
+            ${jobDescription}
+
+            Analyze how well the resume matches the job description.
+
+            Return ONLY this JSON structure:
+            {
+            "score": number,
+            "matchedSkills": string[],
+            "missingSkills": string[],
+            "suggestions": string[]
+            }
+
+            Rules:
+            - score must be between 0 and 100
+            - matchedSkills must come from job description and appear in resume
+            - missingSkills must come from job description but NOT appear in resume 
+            -suggestions must be very imp points which add value to the resume immensly
+            - no markdown
+            - no extra text
+            `;
+
+
+        const response=await ai.chat.completions.create({
+        model: process.env.MODEL,
+        messages: [
+        { role: "system", content: systemPrompt},
+        {
+            role: "user",
+            content: userPrompt,
+        },
+    ],
+
+    response_format: {type: 'json_object'}
+
+            })
+
+    const data=response.choices[0].message.content;
+    const parsedData=JSON.parse(data);
+
+    const result={   //In case ai become sluggish and doesnt return response as intended   //defensive Approach
+                score: Number(parsedData.score) || 0,
+                matchedSkills: Array.isArray(parsedData.matchedSkills) ? parsedData.matchedSkills : [],
+                missingSkills: Array.isArray(parsedData.missingSkills) ? parsedData.missingSkills : [],
+                suggestions:  Array.isArray(parsedData.suggestions) ? parsedData.suggestions : []
+    }
+
+    return res.json(result)
+    
+    }catch(e){
+
+        if(e.status === 429 || e.message.includes('429') || e.constructor.name === 'RateLimitError'){
+            return res.status(429).json({message: 'AI rate limit exceeded. Please try again tommorrow.'})
+        }
+
+        res.status(400).json({message: e.message})
+    }
+}

@@ -13,7 +13,6 @@ const Ats = () => {
 	const [jobDescription, setJobDescription] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [result, setResult] = useState(null);
-
 	// two-part flow
 	const [resumeSource, setResumeSource] = useState('saved'); // 'saved' | 'pdf'
 	const [resume, setResume] = useState(null);
@@ -337,9 +336,12 @@ const Ats = () => {
 										<Lightbulb className="w-6 h-6 text-blue-500" />
 										Suggestions
 									</h3>
-									<div className="bg-white rounded-lg p-6 border-2 border-blue-100 text-gray-700 leading-relaxed hover:shadow-md transition-shadow">
-										{result.suggestions}
-									</div>
+									<ul className="bg-white rounded-lg p-6 border-2 border-blue-100 text-gray-700 space-y-2 list-disc list-inside">
+                                        {result.suggestions.map((point, idx) => (
+                                        <li key={idx}>{point}</li>
+                                                        ))}
+                                    </ul>
+
 								</div>
 							)}
 						</div>
