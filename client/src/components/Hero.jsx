@@ -84,6 +84,9 @@ const Hero = () => {
           <a href="#cta" className="text-white">
             Contact
           </a>
+          <a href="/app/ats" className="text-white">
+            ATS check
+          </a>
           <button
             onClick={() => setMenuOpen(false)}
             className="active:ring-3 active:ring-white aspect-square size-10 p-1 items-center justify-center bg-indigo-500 hover:bg-indigo-700 transition text-white rounded-md flex"
@@ -145,12 +148,11 @@ const Hero = () => {
       </div>
       <style>
         {`
-                    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-                    * {
-                        font-family: 'Poppins', sans-serif;
-                    }
-                `}
+          * {
+           font-family: 'Poppins', sans-serif;                }
+        `}
       </style>
     </>
   );
